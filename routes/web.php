@@ -27,4 +27,5 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'managerOnly']], f
 //роуты для авторизованных пользователей
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'userOnly']], function () {
     Route::get('/', 'UserController@index')->name('user.index');
+    Route::post('/add', 'UserController@add')->name('user.add');
 });

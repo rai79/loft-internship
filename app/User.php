@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -45,5 +46,25 @@ class User extends Authenticatable
     public function isUser()
     {
         return !$this->is_manager;
+    }
+
+    /**
+     * Получаем почтовый ящик администратора
+     *
+     * @return mixed
+     */
+    public static function getManageEmail()
+    {
+        try
+        {
+            if($manager = self::where('is_manager',1)->first()) {
+                return $manager->email;
+            } else {
+                throw new \Exception('Отсутствует учетная запись менеджера в БД. Дальнейшая работа невозможна. Обратитесь к администратору');
+            }
+        } catch (\Exception $e) {
+            Log::critical($e->getMessage());
+        }
+        return false;
     }
 }
