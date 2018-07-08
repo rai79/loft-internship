@@ -22,6 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //роуты для менеджера
 Route::group(['prefix' => 'manager', 'middleware' => ['auth', 'managerOnly']], function () {
     Route::get('/', 'ManagerController@index')->name('manager.index');
+    Route::get('/update/{request_id}', 'ManagerController@update')->name('manager.update');
 });
 
 //роуты для авторизованных пользователей

@@ -41,4 +41,47 @@ class UserRequest extends Model
         return false;
     }
 
+    /**
+     * Получаем все запросы которые еще не обработаны
+     *
+     * @return mixed
+     */
+    public static function getAllProcessing()
+    {
+        return self::where('processed',0)->get();
+    }
+
+    /**
+     * Получаем все запросы которые уже обработаны
+     *
+     * @return mixed
+     */
+    public static function getAllProcessed()
+    {
+        return self::where('processed',1)->get();
+    }
+
+    /**
+     * Обновляем статус запроса (обработан менеджером или нет)
+     *
+     * @param $request_id - идентификатор запроса
+     * @return bool
+     */
+    public static function updateRequest($request_id)
+    {
+        if($request = self::find($request_id)) {
+            $request->processed = 1;
+            return $request->save();
+        }
+        return false;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
 }

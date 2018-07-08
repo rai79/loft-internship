@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    /**
+     * Выводится диалог запроса.
+     * Проверяется время до предыдущего поста и блокируется кнопка отправить до истечения 24 ч.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         if($time = UserRequest::getLastTimeOrder(Auth::user()->id)) {
@@ -24,6 +30,13 @@ class UserController extends Controller
         return view('user.index', $data);
     }
 
+    /**
+     * Добавляет запрос пользователя в БД.
+     * При отсутствии записи менеджера выдается ошибка
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function add(Request $request)
     {
         $this->validate($request, [
